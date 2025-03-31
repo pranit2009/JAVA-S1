@@ -1,0 +1,123 @@
+import java.util.Random; 
+ 
+class NumberGenerator extends Thread { 
+    Random random = new Random(); 
+    NumberProcessor processor; 
+ 
+    public NumberGenerator(NumberProcessor processor) { 
+        this.processor = processor; 
+    } 
+ 
+    public void run() { 
+        while(true) { 
+            int num = random.nextInt(100); 
+            processor.processNumber(num); 
+            try { 
+                Thread.sleep(1000); 
+            } catch (InterruptedException e) { 
+                System.out.println(e); 
+            } 
+        } 
+    } 
+} 
+ 
+class NumberProcessor { 
+    public synchronized void processNumber(int num) { 
+        if(num % 2 == 0) 
+            new SquareCalculator(num).start(); 
+        else 
+            new CubeCalculator(num).start();  
+    } 
+} 
+ 
+class SquareCalculator extends Thread { 
+    int num; 
+ 
+    public SquareCalculator(int num) { 
+        this.num = num; 
+    } 
+ 
+    public void run() { 
+        System.out.println("\nSquare of " + num + " is " + (num * num)); 
+    } 
+} 
+ 
+class CubeCalculator extends Thread { 
+    int num; 
+ 
+    public CubeCalculator(int num) { 
+        this.num = num; 
+    } 
+ 
+    public void run() { 
+        System.out.println("\nCube of " + num + " is " + (num * num * num)); 
+    } 
+} 
+ 
+public class S7Q1 { 
+    public static void main(String args[]) { 
+        NumberProcessor processor = new NumberProcessor(); 
+        new NumberGenerator(processor).start(); 
+    } 
+} 
+ 
+// Slip - 7 Q2 [JAVA] 
+import java.sql.*; 
+ 
+public class S7Q2 { 
+    public static void main(String args[]) { 
+        try { 
+            Class.forName("org.postgresql.Driver"); 
+            Connection con = 
+DriverManager.getConnection("jdbc:postgresql://localhost:5432/ty92","ty92","ty
+ 92"); 
+ 
+            Statement stmt = con.createStatement(); 
+ 
+            stmt.execute("CREATE TABLE IF NOT EXISTS Product(PID int primary 
+key, PNAME varchar(20), PRICE int)"); 
+            System.out.println("Table created successfully!"); 
+ 
+            insertRecords(stmt); 
+            displayRecords(stmt); 
+ 
+            stmt.close(); 
+ 
+        } catch (SQLException | ClassNotFoundException e) { 
+            System.out.println(e); 
+        } 
+    } 
+ 
+    private static void insertRecords(Statement stmt) throws SQLException { 
+        String insertSQL = "INSERT INTO Product (PID, PNAME, PRICE) VALUES "; 
+        String records[] = { 
+            "(1, 'A', 12)", 
+            "(2, 'B', 32)", 
+            "(3, 'C', 24)", 
+            "(4, 'D', 14)", 
+            "(5, 'E', 10)" 
+        }; 
+ 
+        for(String record : records) 
+            stmt.executeUpdate(insertSQL + record); 
+ 
+        System.out.println("\nRecords inserted into product table 
+successfully!"); 
+    } 
+ 
+    private static void displayRecords(Statement stmt) throws SQLException { 
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Product"); 
+ 
+        System.out.println("\n- Records from Product Table -\n"); 
+        System.out.println("\nPID\tPNAME\tPRICE"); 
+ 
+        while(rs.next()) { 
+            int pid = rs.getInt("PID"); 
+            String pname = rs.getString("PNAME"); 
+            int price = rs.getInt("PRICE"); 
+            System.out.println(pid + "\t" + pname + "\t" + price); 
+        } 
+ 
+        rs.close(); 
+    } 
+} 
