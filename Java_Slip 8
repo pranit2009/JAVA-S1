@@ -1,0 +1,103 @@
+// Slip - 8 Q1 [JAVA] 
+import java.io.*; 
+ 
+class ThreadDemo extends Thread { 
+    String msg; 
+    int n; 
+ 
+    ThreadDemo(String msg, int n) { 
+        this.msg = msg; 
+        this.n = n; 
+    } 
+ 
+    public void run() { 
+        for (int i = 0; i < n; i++) { 
+            System.out.println(msg + ": " + (i+1)); 
+        } 
+    } 
+} 
+class A1 { 
+    public static void main(String args[]) throws IOException { 
+        ThreadDemo t1 = new ThreadDemo("Thread1 -> COVID19", 10); 
+        ThreadDemo t2 = new ThreadDemo("Thread2 -> LOCKDOWN2020", 20); 
+        ThreadDemo t3 = new ThreadDemo("Thread3 -> VACCINATED21", 30); 
+ 
+        t1.start(); 
+        t2.start(); 
+        t3.start(); 
+    } 
+} 
+<!-- Slip - 8 Q2 [JAVA] --> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+pageEncoding="UTF-8"%> 
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Prime Number Checker</title> 
+</head> 
+<body> 
+    <h1>Prime Number Checker</h1> 
+     
+    <!-- HTML form to enter the number --> 
+    <form action="" method="get"> 
+        Enter a number: <input type="text" name="number"> 
+        <input type="submit" value="Check"> 
+    </form> 
+     
+    <%! 
+        // Method to check whether a number is prime 
+        boolean isPrime(int num) { 
+            if (num <= 1) { 
+                return false; 
+            } 
+            for (int i = 2; i <= Math.sqrt(num); i++) { 
+                if (num % i == 0) { 
+                    return false; 
+                } 
+            } 
+            return true; 
+        } 
+    %> 
+     
+    <%-- Java code to check if the number is prime --%> 
+    <% 
+        String numberStr = request.getParameter("number"); 
+ 
+        if (numberStr != null && !numberStr.isEmpty()) { 
+            int number = Integer.parseInt(numberStr); 
+            boolean isPrimeNumber = isPrime(number); 
+ 
+            if (isPrimeNumber) { 
+    %> 
+                <p style="color: red;"><%= number %> is a prime number.</p> 
+    <% 
+            } else { 
+    %> 
+                <p style="color: red;"><%= number %> is not a prime 
+number.</p> 
+    <% 
+            } 
+        } else if (numberStr != null && numberStr.isEmpty()) { 
+    %> 
+            <p style="color: red;">Please enter a number.</p> 
+    <% 
+        } 
+    %> 
+</body> 
+</html> 
+ 
+<!-- Slip - 11 Q1 [JAVA] --> 
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Search Customer</title> 
+</head> 
+<body> 
+    <h1>Search Customer</h1> 
+    <form action="SearchServlet" method="post"> 
+        <label for="customerNum">Enter customer number:</label> 
+        <input type="number" id="customerNum" name="customerNum" required> 
+        <button type="submit">Search</button> 
+    </form> 
+</body> 
+</html> 
